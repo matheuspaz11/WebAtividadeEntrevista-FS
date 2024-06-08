@@ -189,17 +189,21 @@ namespace FI.AtividadeEntrevista.DAL
                     cli.CPF = row.Field<string>("CPF");
 
                     cli.Beneficiarios = new List<DML.Beneficiario>();
-                    foreach (DataRow rowBeneficiario in ds.Tables[0].Rows)
+
+                    if (row.Field<long?>("BENEFICIARIO_ID") != null)
                     {
-                        cli.Beneficiarios.Add(
-                            new Beneficiario
-                            {
-                                Id = rowBeneficiario.Field<long>("BENEFICIARIO_ID"),
-                                ClienteId = rowBeneficiario.Field<long>("Id"),
-                                CPF = rowBeneficiario.Field<string>("BENEFICIARIO_CPF"),
-                                Nome = rowBeneficiario.Field<string>("BENEFICIARIO_NOME")
-                            }
-                        );
+                        foreach (DataRow rowBeneficiario in ds.Tables[0].Rows)
+                        {
+                            cli.Beneficiarios.Add(
+                                new Beneficiario
+                                {
+                                    Id = rowBeneficiario.Field<long>("BENEFICIARIO_ID"),
+                                    ClienteId = rowBeneficiario.Field<long>("Id"),
+                                    CPF = rowBeneficiario.Field<string>("BENEFICIARIO_CPF"),
+                                    Nome = rowBeneficiario.Field<string>("BENEFICIARIO_NOME")
+                                }
+                            );
+                        }
                     }
 
                     lista.Add(cli);
