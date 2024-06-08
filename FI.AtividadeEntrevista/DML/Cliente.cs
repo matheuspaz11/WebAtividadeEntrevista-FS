@@ -65,5 +65,10 @@ namespace FI.AtividadeEntrevista.DML
         /// CPF
         /// </summary>
         public string CPF { get; set; }
+
+        /// <summary>
+        /// Beneficiarios
+        /// </summary>
+        public List<Beneficiario> Beneficiarios { get; set; }
     }    
 }

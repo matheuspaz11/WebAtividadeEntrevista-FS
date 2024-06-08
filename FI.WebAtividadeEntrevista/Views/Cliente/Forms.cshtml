@@ -1,4 +1,5 @@
-﻿
+﻿﻿@model WebAtividadeEntrevista.Models.ClienteModel
+
 <form id="formCadastro" method="post">
     <div class="row">
         <div class="col-md-6">
@@ -141,7 +142,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Beneficiários cadastrados serão adicionados aqui -->
+                                    @if (Model != null)
+                                    {
+                                        foreach (var beneficiario in Model.Beneficiarios)
+                                        {
+                                            <tr id="@beneficiario.Id">
+                                                <td>@beneficiario.CPF</td>
+                                                <td>@beneficiario.Nome</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(this.value)" id="editarBeneficiario" value="@beneficiario.Id">Editar</button>
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(this.value)" id="excluirBeneficiario" value="@beneficiario.Id" style="margin-left: 10px">Excluir</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </div>

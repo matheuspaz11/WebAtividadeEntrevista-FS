@@ -42,7 +42,7 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                if (!ValidateCPF.AlreadyExistsCliente(model.CPF))
+                if (!ValidateCPF.AlreadyExistsCliente(model))
                 {
                     model.Id = bo.Incluir(new Cliente()
                     {
@@ -62,7 +62,7 @@ namespace WebAtividadeEntrevista.Controllers
                     {
                         foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
                         {
-                            if (!ValidateCPF.AlreadyExistsBeneficiario(beneficiario.CPF))
+                            if (!ValidateCPF.AlreadyExistsBeneficiario(beneficiario))
                             {
                                 boBeneficiario.Incluir(new Beneficiario()
                                 {
@@ -115,7 +115,7 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                if (!ValidateCPF.AlreadyExistsCliente(model.CPF))
+                if (!ValidateCPF.AlreadyExistsCliente(model))
                 {
                     bo.Alterar(new Cliente()
                     {
@@ -151,6 +151,22 @@ namespace WebAtividadeEntrevista.Controllers
             Cliente cliente = bo.Consultar(id);
             Models.ClienteModel model = null;
 
+            List<BeneficiarioModel> beneficiarios = new List<BeneficiarioModel>();
+
+            if (cliente.Beneficiarios.Count > 0)
+            {
+                foreach (Beneficiario beneficiario in cliente.Beneficiarios)
+                {
+                    beneficiarios.Add(new BeneficiarioModel
+                    {
+                        Id = beneficiario.Id,
+                        ClienteId = beneficiario.ClienteId,
+                        CPF = beneficiario.CPF,
+                        Nome = beneficiario.Nome
+                    });
+                }
+            }
+
             if (cliente != null)
             {
                 model = new ClienteModel()
@@ -165,10 +181,9 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone,
-                    CPF = cliente.CPF
+                    CPF = cliente.CPF,
+                    Beneficiarios = beneficiarios
                 };
-
-            
             }
 
             return View(model);

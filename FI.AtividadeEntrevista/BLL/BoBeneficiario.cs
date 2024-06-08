@@ -38,10 +38,10 @@
         /// </summary>
         /// <param name="CPF"></param>
         /// <returns></returns>
-        public bool VerificarExistencia(string CPF)
+        public bool VerificarExistencia(string CPF, long id)
         {
             DAL.Beneficiarios.DaoBeneficiario ben = new DAL.Beneficiarios.DaoBeneficiario();
-            return ben.VerificarExistencia(CPF);
+            return ben.VerificarExistencia(CPF, id);
         }
     }
 }
