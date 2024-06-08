@@ -1,12 +1,19 @@
-﻿
+﻿let beneficiarios = [];
+
 $(document).ready(function () {
 
     $('#CPF').mask('000.000.000-00');
     $('#CEP').mask('00000-000');
     $('#Telefone').mask('(00) 00000-0000');
+    $('#BeneficiarioCPF').mask('000.000.000-00');
 
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
+
+        beneficiarios.forEach((beneficiario, index) => {
+            $(this).append(`<input type="hidden" name="Beneficiarios[${index}].CPF" value="${beneficiario.cpf}">`);
+            $(this).append(`<input type="hidden" name="Beneficiarios[${index}].Nome" value="${beneficiario.nome}">`);
+        });
 
         const cpf = $(this).find("#CPF").val();
 
@@ -26,7 +33,8 @@ $(document).ready(function () {
                     "Cidade": $(this).find("#Cidade").val(),
                     "Logradouro": $(this).find("#Logradouro").val(),
                     "Telefone": $(this).find("#Telefone").val(),
-                    "CPF": cpf
+                    "CPF": cpf,
+                    "Beneficiarios": beneficiarios
                 },
                 error:
                     function (r) {
@@ -43,7 +51,44 @@ $(document).ready(function () {
             });
         }
     })
-    
+
+    $("#formBeneficiario").on("submit", function (event) {
+        event.preventDefault();
+
+        const cpf = $("#BeneficiarioCPF").val();
+        const nome = $("#BeneficiarioNome").val();
+
+        if (!isValidCPF(cpf)) {
+            ModalDialog("Campo inválido!", "O valor do campo CPF não está no padrão correto, verifique e tente novamente.");
+        } else {
+            if (!existeBeneficiario(cpf)) {
+                const beneficiario = { cpf, nome };
+                beneficiarios.push(beneficiario);
+
+                atualizarLista();
+
+                $("#BeneficiarioCPF").val('');
+                $("#BeneficiarioNome").val('');
+            } else {
+                ModalDialog("Campo inválido!", "Já existe um beneficiario cadastrado com o CPF informado.");
+            }
+        }
+    });
+
+    window.editarBeneficiario = function (index) {
+        const beneficiario = beneficiarios[index];
+
+        $("#BeneficiarioCPF").val(beneficiario.cpf);
+        $("#BeneficiarioNome").val(beneficiario.nome);
+
+        beneficiarios.splice(index, 1);
+        atualizarLista();
+    };
+
+    window.excluirBeneficiario = function (index) {
+        beneficiarios.splice(index, 1);
+        atualizarLista();
+    };
 })
 
 function ModalDialog(titulo, texto) {
@@ -113,4 +158,25 @@ function isValidCPF(cpf) {
     let digit2 = (remainder < 2) ? 0 : (11 - remainder);
 
     return cpf.endsWith(digit1.toString() + digit2.toString());
+}
+
+function atualizarLista() {
+    const tbody = $("#beneficiariosTable tbody");
+    tbody.empty();
+
+    beneficiarios.forEach((beneficiario, index) => {
+        const row = `<tr>
+                        <td>${beneficiario.cpf}</td>
+                        <td>${beneficiario.nome}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="editarBeneficiario(${index})">Editar</button>
+                            <button class="btn btn-sm btn-danger" type="button" onclick="excluirBeneficiario(${index})" style="margin-left: 10px">Excluir</button>
+                        </td>
+                    </tr>`;
+        tbody.append(row);
+    });
+}
+
+function existeBeneficiario(cpf) {
+    return beneficiarios.some(beneficiario => beneficiario.cpf === cpf);
 }
