@@ -27,6 +27,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
 
             List<string> erros = new List<string>();
 
@@ -41,7 +42,7 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                if (!ValidateCPF.AlreadyExists(model.CPF))
+                if (!ValidateCPF.AlreadyExistsCliente(model.CPF))
                 {
                     model.Id = bo.Incluir(new Cliente()
                     {
@@ -56,6 +57,33 @@ namespace WebAtividadeEntrevista.Controllers
                         Telefone = model.Telefone,
                         CPF = model.CPF
                     });
+
+                    if (model.Beneficiarios != null)
+                    {
+                        foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                        {
+                            if (!ValidateCPF.AlreadyExistsBeneficiario(beneficiario.CPF))
+                            {
+                                boBeneficiario.Incluir(new Beneficiario()
+                                {
+                                    CPF = beneficiario.CPF,
+                                    Nome = beneficiario.Nome,
+                                    ClienteId = model.Id
+                                });
+                            }
+                            else
+                            {
+                                erros.Add($"Já existe um beneficiario cadastrado com o CPF: {model.CPF}.");
+                            }
+                        }
+
+                        if (erros.Count > 0)
+                        {
+                            erros.Add("Cliente cadastrado parcialmente.");
+
+                            return Json(string.Join(Environment.NewLine, erros));
+                        }
+                    }
 
                     return Json("Cadastro efetuado com sucesso");
                 }
@@ -87,7 +115,7 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                if (!ValidateCPF.AlreadyExists(model.CPF))
+                if (!ValidateCPF.AlreadyExistsCliente(model.CPF))
                 {
                     bo.Alterar(new Cliente()
                     {
