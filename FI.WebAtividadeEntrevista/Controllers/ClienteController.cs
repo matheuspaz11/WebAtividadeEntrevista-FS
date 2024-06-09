@@ -73,7 +73,7 @@ namespace WebAtividadeEntrevista.Controllers
                             }
                             else
                             {
-                                erros.Add($"Já existe um beneficiario cadastrado com o CPF: {model.CPF}.");
+                                erros.Add($"Já existe um beneficiário cadastrado com o CPF: {beneficiario.CPF}.");
                             }
                         }
 
