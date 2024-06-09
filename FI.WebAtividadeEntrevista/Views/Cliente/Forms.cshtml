@@ -101,8 +101,8 @@
 <div class="modal fade" id="beneficiariosModal" tabindex="-1" role="dialog" aria-labelledby="beneficiariosModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="beneficiariosModalLabel">Beneficiários</h5>
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h5 class="modal-title" id="beneficiariosModalLabel" style="margin: 0;">Beneficiários</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -153,7 +153,7 @@
                                                 <td>@beneficiario.CPF</td>
                                                 <td>@beneficiario.Nome</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(@index)" id="editarBeneficiario" value="@beneficiario.Id">Editar</button>
+                                                    <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(@index)" id="editarBeneficiario" value="@beneficiario.Id">Alterar</button>
                                                     <button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(@index)" id="excluirBeneficiario" value="@beneficiario.Id" style="margin-left: 10px">Excluir</button>
                                                 </td>
                                             </tr>

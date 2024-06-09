@@ -205,7 +205,7 @@ function atualizarTabela() {
                         <td>${beneficiario.CPF}</td>
                         <td>${beneficiario.Nome}</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(${index})" id="editarBeneficiario" value="${beneficiario.Id}">Editar</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(${index})" id="editarBeneficiario" value="${beneficiario.Id}">Alterar</button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(${index})" id="excluirBeneficiario" value="${beneficiario.Id}" style="margin-left: 10px">Excluir</button>
                         </td>
                     </tr>`;

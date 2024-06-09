@@ -169,7 +169,7 @@ function atualizarLista() {
                         <td>${beneficiario.cpf}</td>
                         <td>${beneficiario.nome}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" type="button" onclick="editarBeneficiario(${index})">Editar</button>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="editarBeneficiario(${index})">Alterar</button>
                             <button class="btn btn-sm btn-danger" type="button" onclick="excluirBeneficiario(${index})" style="margin-left: 10px">Excluir</button>
                         </td>
                     </tr>`;
