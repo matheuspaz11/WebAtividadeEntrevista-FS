@@ -1,8 +1,10 @@
-﻿
+﻿let beneficiarios = [];
+
 $(document).ready(function () {
     $('#CPF').mask('000.000.000-00');
     $('#CEP').mask('00000-000');
     $('#Telefone').mask('(00) 00000-0000');
+    $('#BeneficiarioCPF').mask('000.000.000-00');
 
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
@@ -16,6 +18,8 @@ $(document).ready(function () {
         $('#formCadastro #Telefone').val(obj.Telefone);
         $('#formCadastro #CPF').val(obj.CPF);
     }
+
+    atualizarLista();
 
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
@@ -38,7 +42,8 @@ $(document).ready(function () {
                     "Cidade": $(this).find("#Cidade").val(),
                     "Logradouro": $(this).find("#Logradouro").val(),
                     "Telefone": $(this).find("#Telefone").val(),
-                    "CPF": $(this).find("#CPF").val()
+                    "CPF": $(this).find("#CPF").val(),
+                    "Beneficiarios": beneficiarios
                 },
                 error:
                     function (r) {
@@ -56,7 +61,56 @@ $(document).ready(function () {
             });
         }
     })
-    
+
+    $("#formBeneficiario").on("submit", function (event) {
+        event.preventDefault();
+
+        const Id = $("#BeneficiarioId").val();
+        const CPF = $("#BeneficiarioCPF").val();
+        const Nome = $("#BeneficiarioNome").val();
+
+        if (!isValidCPF(CPF)) {
+            ModalDialog("Campo inválido!", "O valor do campo CPF não está no padrão correto, verifique e tente novamente.");
+        } else {
+            if (!existeBeneficiario(CPF)) {
+                const beneficiario = { Id, CPF, Nome };
+                beneficiarios.push(beneficiario);
+
+                atualizarTabela();
+
+                $("#BeneficiarioId").val('');
+                $("#BeneficiarioCPF").val('');
+                $("#BeneficiarioNome").val('');
+            } else {
+                ModalDialog("Campo inválido!", "Já existe um beneficiário cadastrado com o CPF informado.");
+            }
+        }
+    });
+
+    window.editarBeneficiario = function (index) {
+
+        const beneficiario = beneficiarios[index];
+
+        if (beneficiario) {
+            $("#BeneficiarioId").val(beneficiario.Id);
+            $("#BeneficiarioCPF").val(beneficiario.CPF);
+            $("#BeneficiarioNome").val(beneficiario.Nome);
+
+            beneficiarios.splice(index, 1);
+
+            atualizarTabela();
+        } else {
+            console.error("Índice inválido: " + index);
+        }
+    };
+
+    window.excluirBeneficiario = function (index) {
+        const beneficiario = beneficiarios[index];
+
+        beneficiario.Action = 1;
+
+        atualizarTabela();
+    };
 })
 
 function ModalDialog(titulo, texto) {
@@ -126,4 +180,40 @@ function isValidCPF(cpf) {
     let digit2 = (remainder < 2) ? 0 : (11 - remainder);
 
     return cpf.endsWith(digit1.toString() + digit2.toString());
+}
+
+function atualizarLista() {
+    beneficiarios = [];
+
+    $('#beneficiariosTable tbody tr').each(function () {
+        var beneficiario = {
+            Id: $(this).attr('id'),
+            CPF: $(this).find('td:eq(0)').text(),
+            Nome: $(this).find('td:eq(1)').text()
+        };
+        beneficiarios.push(beneficiario);
+    });
+}
+
+function atualizarTabela() {
+    const tbody = $("#beneficiariosTable tbody");
+    tbody.empty();
+
+    beneficiarios.forEach((beneficiario, index) => {
+        if (beneficiario.Action !== 1) {
+            const row = `<tr id="${beneficiario.Id}">
+                        <td>${beneficiario.CPF}</td>
+                        <td>${beneficiario.Nome}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(${index})" id="editarBeneficiario" value="${beneficiario.Id}">Editar</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(${index})" id="excluirBeneficiario" value="${beneficiario.Id}" style="margin-left: 10px">Excluir</button>
+                        </td>
+                    </tr>`;
+            tbody.append(row);
+        }
+    });
+}
+
+function existeBeneficiario(CPF) {
+    return beneficiarios.some(beneficiario => beneficiario.CPF === CPF);
 }

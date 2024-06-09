@@ -7,9 +7,9 @@ namespace WebAtividadeEntrevista.Models
     /// </summary>
     public class BeneficiarioModel
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
-        public long ClienteId { get; set; }
+        public long? ClienteId { get; set; }
 
         /// <summary>
         /// CPF
@@ -22,5 +22,10 @@ namespace WebAtividadeEntrevista.Models
         /// </summary>
         [Required]
         public string Nome { get; set; }
+
+        /// <summary>
+        /// Action
+        /// </summary>
+        public int Action { get; set; }
     }
 }

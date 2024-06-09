@@ -37,17 +37,16 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
 
             parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", beneficiario.CPF));
             parametros.Add(new System.Data.SqlClient.SqlParameter("Nome", beneficiario.Nome));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("IdCliente", beneficiario.ClienteId));
             parametros.Add(new System.Data.SqlClient.SqlParameter("ID", beneficiario.Id));
 
-            base.Executar("FI_SP_AltBeneficiario", parametros);
+            base.Executar("FI_SP_AltBenef", parametros);
         }
 
         /// <summary>
         /// Excluir Beneficiario
         /// </summary>
         /// <param name="beneficiario">Objeto de beneficiario</param>
-        internal void Excluir(long Id)
+        internal void Excluir(long? Id)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 
@@ -56,7 +55,7 @@ namespace FI.AtividadeEntrevista.DAL.Beneficiarios
             base.Executar("FI_SP_DelBeneficiario", parametros);
         }
 
-        internal bool VerificarExistencia(string CPF, long id)
+        internal bool VerificarExistencia(string CPF, long? id)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 

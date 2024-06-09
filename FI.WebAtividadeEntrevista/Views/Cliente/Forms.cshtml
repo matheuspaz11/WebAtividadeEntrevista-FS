@@ -110,6 +110,7 @@
             <div class="modal-body">
                 <form id="formBeneficiario" method="post">
                     <div class="row">
+                        <input type="hidden" id="BeneficiarioId" name="BeneficiarioId" />
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="BeneficiarioCPF">CPF:</label>
@@ -144,16 +145,20 @@
                                 <tbody>
                                     @if (Model != null)
                                     {
+                                        var index = 0;
+
                                         foreach (var beneficiario in Model.Beneficiarios)
                                         {
                                             <tr id="@beneficiario.Id">
                                                 <td>@beneficiario.CPF</td>
                                                 <td>@beneficiario.Nome</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(this.value)" id="editarBeneficiario" value="@beneficiario.Id">Editar</button>
-                                                    <button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(this.value)" id="excluirBeneficiario" value="@beneficiario.Id" style="margin-left: 10px">Excluir</button>
+                                                    <button type="button" class="btn btn-sm btn-primary" onclick="editarBeneficiario(@index)" id="editarBeneficiario" value="@beneficiario.Id">Editar</button>
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(@index)" id="excluirBeneficiario" value="@beneficiario.Id" style="margin-left: 10px">Excluir</button>
                                                 </td>
                                             </tr>
+
+                                            index++;
                                         }
                                     }
                                 </tbody>

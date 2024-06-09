@@ -8,12 +8,12 @@
         /// <summary>
         /// Id
         /// </summary>
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         /// <summary>
         /// Id do cliente
         /// </summary>
-        public long ClienteId { get; set; }
+        public long? ClienteId { get; set; }
 
         /// <summary>
         /// CPF

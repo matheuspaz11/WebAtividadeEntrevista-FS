@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="id">id do beneficiario</param>
         /// <returns></returns>
-        public void Excluir(long id)
+        public void Excluir(long? id)
         {
             DAL.Beneficiarios.DaoBeneficiario ben = new DAL.Beneficiarios.DaoBeneficiario();
             ben.Excluir(id);
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="CPF"></param>
         /// <returns></returns>
-        public bool VerificarExistencia(string CPF, long id)
+        public bool VerificarExistencia(string CPF, long? id)
         {
             DAL.Beneficiarios.DaoBeneficiario ben = new DAL.Beneficiarios.DaoBeneficiario();
             return ben.VerificarExistencia(CPF, id);

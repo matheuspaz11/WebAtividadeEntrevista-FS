@@ -11,12 +11,5 @@ namespace WebAtividadeEntrevista.Helpers.Validators
 
             return bo.VerificarExistencia(model.CPF, model.Id);
         }
-
-        public static bool AlreadyExistsBeneficiario(BeneficiarioModel model)
-        {
-            BoBeneficiario bo = new BoBeneficiario();
-
-            return bo.VerificarExistencia(model.CPF, model.Id);
-        }
     }
 }

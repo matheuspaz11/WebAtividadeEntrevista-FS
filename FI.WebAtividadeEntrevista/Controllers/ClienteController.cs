@@ -62,26 +62,12 @@ namespace WebAtividadeEntrevista.Controllers
                     {
                         foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
                         {
-                            if (!ValidateCPF.AlreadyExistsBeneficiario(beneficiario))
+                            boBeneficiario.Incluir(new Beneficiario()
                             {
-                                boBeneficiario.Incluir(new Beneficiario()
-                                {
-                                    CPF = beneficiario.CPF,
-                                    Nome = beneficiario.Nome,
-                                    ClienteId = model.Id
-                                });
-                            }
-                            else
-                            {
-                                erros.Add($"Já existe um beneficiário cadastrado com o CPF: {beneficiario.CPF}.");
-                            }
-                        }
-
-                        if (erros.Count > 0)
-                        {
-                            erros.Add("Cliente cadastrado parcialmente.");
-
-                            return Json(string.Join(Environment.NewLine, erros));
+                                CPF = beneficiario.CPF,
+                                Nome = beneficiario.Nome,
+                                ClienteId = model.Id
+                            });
                         }
                     }
 
@@ -101,6 +87,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
 
             List<string> erros = new List<string>();
 
@@ -131,6 +118,34 @@ namespace WebAtividadeEntrevista.Controllers
                         Telefone = model.Telefone,
                         CPF = model.CPF
                     });
+
+                    if (model.Beneficiarios != null)
+                    {
+                        foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+                        {
+                            if(beneficiario.Id == null)
+                            {
+                                boBeneficiario.Incluir(new Beneficiario()
+                                {
+                                    CPF = beneficiario.CPF,
+                                    Nome = beneficiario.Nome,
+                                    ClienteId = model.Id
+                                });
+                            }
+                            else if (beneficiario.Id != null && beneficiario.Action == 0)
+                            {
+                                boBeneficiario.Alterar(new Beneficiario()
+                                {
+                                    Id = beneficiario.Id,
+                                    CPF = beneficiario.CPF,
+                                    Nome = beneficiario.Nome,
+                                    ClienteId = model.Id
+                                });
+                            } 
+                            else if (beneficiario.Id != null && beneficiario.Action == 1)
+                                boBeneficiario.Excluir(beneficiario.Id);
+                        }
+                    }
 
                     return Json("Cadastro alterado com sucesso");
                 }
